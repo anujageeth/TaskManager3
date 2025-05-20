@@ -41,8 +41,8 @@ const Navbar = () => {
               </>
             ) : (
               <li className="nav-item">
-                <a 
-                  href="http://localhost:5000/api/auth/google"
+                {/* <a 
+                  href="/api/auth/google"
                   className="btn btn-primary d-flex align-items-center"
                 >
                   <svg 
@@ -60,7 +60,7 @@ const Navbar = () => {
                     />
                   </svg>
                   Login with Google
-                </a>
+                </a> */}
               </li>
             )}
           </ul>

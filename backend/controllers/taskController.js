@@ -98,14 +98,16 @@ exports.deleteTask = async (req, res) => {
       return res.status(404).json({ msg: 'Task not found' });
     }
 
-    await task.remove();
-    res.json({ msg: 'Task removed' });
+    // Use deleteOne() instead of remove()
+    await Task.deleteOne({ _id: req.params.id });
+    
+    res.json({ msg: 'Task deleted successfully' });
   } catch (err) {
-    console.error(err);
+    console.error('Delete task error:', err);
     if (err.kind === 'ObjectId') {
       return res.status(404).json({ msg: 'Task not found' });
     }
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: 'Server error deleting task' });
   }
 };
 

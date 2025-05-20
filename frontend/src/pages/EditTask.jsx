@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { getTaskById, updateTask } from '../services/taskService';
 
 const EditTask = () => {
-  const { taskId } = useParams();
+  const { id } = useParams(); // Changed from taskId to id
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,8 @@ const EditTask = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const task = await getTaskById(taskId);
+        console.log('Fetching task with ID:', id);
+        const task = await getTaskById(id); // Changed from taskId to id
         setFormData({
           title: task.title,
           description: task.description,
@@ -31,14 +32,17 @@ const EditTask = () => {
           status: task.status
         });
       } catch (err) {
+        console.error('Error fetching task:', err);
         setError('Error loading task details');
       } finally {
         setInitialLoading(false);
       }
     };
 
-    fetchTask();
-  }, [taskId]);
+    if (id) { // Changed from taskId to id
+      fetchTask();
+    }
+  }, [id]); // Changed from taskId to id
 
   const handleChange = (e) => {
     setFormData({
@@ -53,9 +57,10 @@ const EditTask = () => {
     setError('');
 
     try {
-      await updateTask(taskId, formData);
-      navigate('/tasks');
+      await updateTask(id, formData); // Changed from taskId to id
+      navigate('/tasks', { state: { message: 'Task updated successfully' } });
     } catch (err) {
+      console.error('Error updating task:', err);
       setError(err.response?.data?.msg || 'Error updating task');
     } finally {
       setLoading(false);

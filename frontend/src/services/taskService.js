@@ -41,9 +41,13 @@ export const updateTask = async (taskId, taskData) => {
 export const deleteTask = async (taskId) => {
   try {
     const response = await api.delete(`${BASE_URL}/${taskId}`);
-    return response.data;
+    if (response.status === 200) {
+      return response.data;
+    }
+    throw new Error(response.data.msg || 'Error deleting task');
   } catch (error) {
-    throw error;
+    console.error('Delete task error:', error);
+    throw error.response?.data || error;
   }
 };
 

@@ -11,7 +11,6 @@ import EditTask from './pages/EditTask';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/Home';
 import NotFound from './pages/NotFound';
-import Dashboard from './pages/Dashboard';
 
 function App() {
   return (

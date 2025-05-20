@@ -1,13 +1,15 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import api from '../services/api';
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     setLoading(true);
@@ -22,6 +24,14 @@ function TaskList() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage(location.state.message);
+      const timer = setTimeout(() => setMessage(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -63,6 +73,11 @@ function TaskList() {
 
   return (
     <div className="p-6">
+      {message && (
+        <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+          {message}
+        </div>
+      )}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">All Tasks</h2>
         <div className="space-x-4">
