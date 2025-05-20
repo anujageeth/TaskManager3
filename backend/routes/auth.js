@@ -30,8 +30,17 @@ router.get('/user', (req, res) => {
 // @desc    Logout user / clear cookie
 // @access  Public
 router.get('/logout', (req, res) => {
-  res.clearCookie('token');
-  res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}`);
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Error logging out' });
+  }
 });
 
 // Auth routes
