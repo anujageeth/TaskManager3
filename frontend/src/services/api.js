@@ -2,10 +2,10 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
-  },
-  withCredentials: true // Enable sending cookies
+  }
 });
 
 // Add request interceptor to include auth token
@@ -18,6 +18,18 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add request interceptor to handle errors
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Redirect to login if unauthorized
+      window.location.href = '/login';
+    }
     return Promise.reject(error);
   }
 );
