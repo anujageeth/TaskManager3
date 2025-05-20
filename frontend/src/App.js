@@ -10,11 +10,12 @@ import EditTask from './pages/EditTask';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/Home';
 import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <div className="min-h-screen bg-gray-100">
           <Navbar />
           <main className="container mx-auto px-4 py-8">
@@ -24,6 +25,11 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
 
               {/* Protected Routes */}
+              <Route path="/dashboard" element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              } />
               <Route path="/tasks" element={
                 <PrivateRoute>
                   <TaskList />
@@ -50,8 +56,8 @@ function App() {
             </Routes>
           </main>
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
