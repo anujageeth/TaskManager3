@@ -44,99 +44,121 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent"></div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Welcome, {currentUser?.name || 'User'}!
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Welcome Section */}
+      <div className="mb-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-8 text-white">
+        <h1 className="text-4xl font-bold">
+          Welcome back, {currentUser?.name || 'User'}! 👋
         </h1>
-        <p className="text-gray-600 mt-1">Here's an overview of your tasks</p>
+        <p className="mt-2 text-blue-100">Manage your tasks and stay productive</p>
       </div>
 
-      {/* Task Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow-md p-6">
+      {/* Statistics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-500">Total Tasks</p>
-              <p className="text-2xl font-semibold text-gray-900">{tasks.length}</p>
+              <p className="text-sm font-medium text-gray-600">Total Tasks</p>
+              <p className="text-3xl font-bold text-gray-900">{tasks.length}</p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="p-2 bg-blue-100 rounded-full">
+              <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
           </div>
+          <div className="mt-4">
+            <div className="h-1 bg-blue-100 rounded-full">
+              <div className="h-1 bg-blue-500 rounded-full" style={{ width: '100%' }}></div>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        {/* Pending Tasks Card */}
+        <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-500">Pending</p>
-              <p className="text-2xl font-semibold text-yellow-500">{pendingTasks}</p>
+              <p className="text-sm font-medium text-gray-600">Pending</p>
+              <p className="text-3xl font-bold text-yellow-500">{pendingTasks}</p>
             </div>
             <div className="p-3 bg-yellow-100 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500">In Progress</p>
-              <p className="text-2xl font-semibold text-blue-500">{inProgressTasks}</p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
+          <div className="mt-4">
+            <div className="h-1 bg-yellow-100 rounded-full">
+              <div className="h-1 bg-yellow-500 rounded-full" 
+                style={{ width: `${(pendingTasks / tasks.length) * 100}%` }}></div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        {/* In Progress Tasks Card */}
+        <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-500">Completed</p>
-              <p className="text-2xl font-semibold text-green-500">{completedTasks}</p>
+              <p className="text-sm font-medium text-gray-600">In Progress</p>
+              <p className="text-3xl font-bold text-blue-500">{inProgressTasks}</p>
+            </div>
+            <div className="p-3 bg-blue-100 rounded-full">
+              <svg className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="h-1 bg-blue-100 rounded-full">
+              <div className="h-1 bg-blue-500 rounded-full" 
+                style={{ width: `${(inProgressTasks / tasks.length) * 100}%` }}></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Completed</p>
+              <p className="text-3xl font-bold text-green-500">{completedTasks}</p>
             </div>
             <div className="p-3 bg-green-100 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="h-1 bg-green-100 rounded-full">
+              <div className="h-1 bg-green-500 rounded-full" 
+                style={{ width: `${(completedTasks / tasks.length) * 100}%` }}></div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h2>
-          <div className="flex flex-wrap gap-3">
-            <Link 
-              to="/tasks/new" 
-              className="btn-primary flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      {/* Quick Actions and Deadlines Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+        <div className="bg-white rounded-xl shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Actions</h2>
+          <div className="space-y-4">
+            <Link to="/tasks/new" 
+              className="flex items-center justify-center w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Add New Task
+              Create New Task
             </Link>
-            <Link 
-              to="/tasks" 
-              className="btn-secondary flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Link to="/tasks" 
+              className="flex items-center justify-center w-full p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
               </svg>
               View All Tasks
@@ -144,38 +166,40 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Upcoming Deadlines */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Upcoming Deadlines</h2>
+        <div className="bg-white rounded-xl shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Upcoming Deadlines</h2>
           {upcomingDeadlines.length > 0 ? (
-            <ul className="divide-y divide-gray-200">
+            <div className="space-y-4">
               {upcomingDeadlines.slice(0, 3).map(task => (
-                <li key={task._id} className="py-3">
-                  <Link to={`/tasks/${task._id}`} className="block hover:bg-gray-50 rounded-md -mx-2 px-2 py-1">
-                    <p className="font-medium text-gray-900">{task.title}</p>
-                    <div className="flex justify-between mt-1">
-                      <p className="text-sm text-gray-500">
-                        Due: {new Date(task.deadline).toLocaleDateString()}
+                <Link key={task._id} to={`/tasks/${task._id}`} 
+                  className="block p-4 rounded-lg hover:bg-gray-50 border border-gray-200 transition-colors">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{task.title}</h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Due: {new Date(task.deadline).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
                       </p>
-                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                        task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                        task.status === 'In Progress' ? 'bg-blue-100 text-blue-800' : 
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {task.status}
-                      </span>
                     </div>
-                  </Link>
-                </li>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
+                      task.status === 'In Progress' ? 'bg-blue-100 text-blue-800' : 
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      {task.status}
+                    </span>
+                  </div>
+                </Link>
               ))}
-            </ul>
+            </div>
           ) : (
-            <p className="text-gray-500">No upcoming deadlines in the next 7 days.</p>
-          )}
-          {upcomingDeadlines.length > 3 && (
-            <Link to="/tasks" className="text-blue-600 hover:text-blue-800 text-sm font-medium block mt-3">
-              View all deadlines
-            </Link>
+            <div className="text-center py-8">
+              <p className="text-gray-500">No upcoming deadlines</p>
+              <p className="text-sm text-gray-400 mt-1">You're all caught up! 🎉</p>
+            </div>
           )}
         </div>
       </div>
