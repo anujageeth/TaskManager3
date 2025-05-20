@@ -3,12 +3,16 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 
 // Load environment variables
 dotenv.config();
+
+// Add this line after other requires
+require('./config/passport')(passport);
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -24,7 +28,21 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+// Add session middleware BEFORE passport.initialize()
+app.use(session({
+  secret: process.env.SESSION_SECRET || process.env.JWT_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
