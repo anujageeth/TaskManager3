@@ -7,6 +7,39 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+<<<<<<< Updated upstream
+=======
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const checkUser = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/user`, {
+        withCredentials: true,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      setCurrentUser(response.data);
+      setIsAuthenticated(true);
+      setError(null);
+    } catch (error) {
+      if (!error.response || error.response.status !== 401) {
+        console.error('Auth error:', error.response?.data || error.message);
+      }
+      setCurrentUser(null);
+      setIsAuthenticated(false);
+      
+      // Only redirect if not on home page
+      if (window.location.pathname !== '/' && window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+>>>>>>> Stashed changes
 
   useEffect(() => {
     const checkLoggedIn = async () => {

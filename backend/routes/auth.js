@@ -34,6 +34,35 @@ router.get('/logout', (req, res) => {
   res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}`);
 });
 
+<<<<<<< Updated upstream
+=======
+// @route   GET /api/auth/google
+// @desc    Authenticate with Google
+// @access  Public
+router.get('/google', (req, res, next) => {
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    prompt: 'select_account',
+    accessType: 'offline',
+    failureRedirect: 'http://localhost:3000/login',
+    successRedirect: 'http://localhost:3000/dashboard'
+  })(req, res, next);
+});
+
+// @route   GET /api/auth/google/callback
+// @desc    Google authentication callback
+// @access  Public
+router.get('/google/callback',
+  passport.authenticate('google', { 
+    failureRedirect: 'http://localhost:3000/login'
+  }),
+  (req, res) => {
+    console.log('Google callback successful');
+    res.redirect('http://localhost:3000/dashboard');
+  }
+);
+
+>>>>>>> Stashed changes
 // Auth routes
 router.post('/register', authController.register);
 router.post('/login', authController.login);
