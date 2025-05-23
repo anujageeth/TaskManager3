@@ -1,5 +1,8 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '../services/api';
+
+const API_URL = '/api/auth';
 
 export const AuthContext = createContext();
 
@@ -7,20 +10,11 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-<<<<<<< Updated upstream
-=======
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const checkUser = async () => {
     try {
-      const response = await axios.get(`${API_URL}/user`, {
-        withCredentials: true,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-      
+      const response = await api.get(`${API_URL}/user`);
       setCurrentUser(response.data);
       setIsAuthenticated(true);
       setError(null);
@@ -39,30 +33,20 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
->>>>>>> Stashed changes
 
   useEffect(() => {
-    const checkLoggedIn = async () => {
-      try {
-        const res = await axios.get('/api/auth/user', { withCredentials: true });
-        setCurrentUser(res.data);
-        setLoading(false);
-      } catch (err) {
-        console.log('Not authenticated');
-        setCurrentUser(null);
-        setLoading(false);
-      }
-    };
-
-    checkLoggedIn();
+    checkUser();
   }, []);
 
   const logout = async () => {
     try {
-      await axios.get('/api/auth/logout', { withCredentials: true });
+      await api.get(`${API_URL}/logout`);
       setCurrentUser(null);
+      setIsAuthenticated(false);
+      window.location.href = '/login';
     } catch (err) {
       setError('Error logging out');
+      console.error('Logout error:', err);
     }
   };
 
@@ -72,10 +56,14 @@ export const AuthProvider = ({ children }) => {
         currentUser,
         loading,
         error,
-        logout
+        isAuthenticated,
+        logout,
+        checkUser
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;
