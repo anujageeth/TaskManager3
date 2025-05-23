@@ -48,8 +48,8 @@ router.get('/google', (req, res, next) => {
     scope: ['profile', 'email'],
     prompt: 'select_account',
     accessType: 'offline',
-    failureRedirect: 'http://localhost:1812/login',
-    successRedirect: 'http://localhost:1812/dashboard'
+    failureRedirect: 'http://localhost:3000/login',
+    successRedirect: 'http://localhost:3000/dashboard'
   })(req, res, next);
 });
 
@@ -58,11 +58,11 @@ router.get('/google', (req, res, next) => {
 // @access  Public
 router.get('/google/callback',
   passport.authenticate('google', { 
-    failureRedirect: 'http://localhost:1812/login'
+    failureRedirect: 'http://localhost:3000/login'
   }),
   (req, res) => {
     console.log('Google callback successful');
-    res.redirect('http://localhost:1812/dashboard');
+    res.redirect('http://localhost:3000/dashboard');
   }
 );
 

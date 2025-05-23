@@ -40,124 +40,140 @@ const AddTask = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Create New Task</h1>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-              Title *
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="input"
-              required
-              placeholder="Enter task title"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-              Description *
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="input min-h-[100px]"
-              required
-              placeholder="Enter task description"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deadline">
-              Deadline *
-            </label>
-            <input
-              type="date"
-              id="deadline"
-              name="deadline"
-              value={formData.deadline}
-              onChange={handleChange}
-              className="input"
-              required
-              min={new Date().toISOString().split('T')[0]}
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="assignedTo">
-              Assigned To *
-            </label>
-            <input
-              type="text"
-              id="assignedTo"
-              name="assignedTo"
-              value={formData.assignedTo}
-              onChange={handleChange}
-              className="input"
-              required
-              placeholder="Enter assignee name"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="status">
-              Status
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="input"
-            >
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Done">Done</option>
-            </select>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="flex items-center">
-                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Creating...
-                </span>
-              ) : (
-                'Create Task'
+    <div className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <div className="card border-0 shadow-lg">
+            <div className="card-header bg-primary bg-opacity-10 border-0">
+              <h1 className="h4 text-primary mb-0">
+                <i className="bi bi-plus-circle me-2"></i>
+                Create New Task
+              </h1>
+            </div>
+            
+            <div className="card-body p-4">
+              {error && (
+                <div className="alert alert-danger d-flex align-items-center" role="alert">
+                  <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                  {error}
+                </div>
               )}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/tasks')}
-              className="btn-secondary"
-            >
-              Cancel
-            </button>
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label className="form-label" htmlFor="title">
+                    Title <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    className="form-control form-control-lg"
+                    required
+                    placeholder="Enter task title"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label" htmlFor="description">
+                    Description <span className="text-danger">*</span>
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    className="form-control"
+                    rows="4"
+                    required
+                    placeholder="Enter task description"
+                  />
+                </div>
+
+                <div className="row mb-4">
+                  <div className="col-md-6">
+                    <label className="form-label" htmlFor="deadline">
+                      Deadline <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      id="deadline"
+                      name="deadline"
+                      value={formData.deadline}
+                      onChange={handleChange}
+                      className="form-control"
+                      required
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label" htmlFor="assignedTo">
+                      Assigned To <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="assignedTo"
+                      name="assignedTo"
+                      value={formData.assignedTo}
+                      onChange={handleChange}
+                      className="form-control"
+                      required
+                      placeholder="Enter assignee name"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label" htmlFor="status">
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    className="form-select"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                  </select>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/tasks')}
+                    className="btn btn-light btn-lg"
+                  >
+                    <i className="bi bi-arrow-left me-2"></i>
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Creating...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-check-circle me-2"></i>
+                        Create Task
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

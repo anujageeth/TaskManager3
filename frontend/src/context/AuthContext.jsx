@@ -30,7 +30,9 @@ export const AuthProvider = ({ children }) => {
       }
       setCurrentUser(null);
       setIsAuthenticated(false);
-      if (window.location.pathname !== '/login') {
+      
+      // Only redirect if not on home page
+      if (window.location.pathname !== '/' && window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
     } finally {

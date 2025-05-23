@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import LoadingSpinner from '../components/LoadingSpinner';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 
 const TaskDetails = () => {
-  const { id } = useParams();  // Changed from taskId to id to match route parameter
+  const { id } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,12 +14,10 @@ const TaskDetails = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        console.log('Fetching task with ID:', id);
         const response = await api.get(`/api/tasks/${id}`);
         setTask(response.data);
         setError('');
       } catch (err) {
-        console.error('Error fetching task:', err);
         setError('Error loading task details');
       } finally {
         setLoading(false);
@@ -41,7 +38,6 @@ const TaskDetails = () => {
         state: { message: 'Task deleted successfully' }
       });
     } catch (err) {
-      console.error('Error deleting task:', err);
       setError(err.response?.data?.msg || 'Error deleting task');
       setLoading(false);
     }
@@ -49,16 +45,19 @@ const TaskDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <LoadingSpinner size="large" />
+      <div className="d-flex justify-content-center align-items-center min-vh-50">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div className="container py-4">
+        <div className="alert alert-danger" role="alert">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
           {error}
         </div>
       </div>
@@ -67,8 +66,9 @@ const TaskDetails = () => {
 
   if (!task) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+      <div className="container py-4">
+        <div className="alert alert-warning" role="alert">
+          <i className="bi bi-question-circle-fill me-2"></i>
           Task not found
         </div>
       </div>
@@ -77,71 +77,107 @@ const TaskDetails = () => {
 
   return (
     <>
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="px-6 py-4">
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-3xl font-bold text-gray-800">{task.title}</h1>
-              <div className="space-x-2">
+      <div className="container py-4">
+        <div className="card shadow border-0">
+          <div className="card-body p-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h1 className="card-title h3 mb-0">{task.title}</h1>
+              <div className="btn-group">
                 <Link
                   to={`/tasks/edit/${id}`}
-                  className="inline-flex items-center px-4 py-2 border border-indigo-500 text-indigo-500 hover:bg-indigo-50 rounded-md transition-colors"
+                  className="btn btn-outline-primary"
                 >
+                  <i className="bi bi-pencil me-2"></i>
                   Edit
                 </Link>
                 <button
                   onClick={() => setShowDeleteModal(true)}
                   disabled={loading}
-                  className="inline-flex items-center px-4 py-2 border border-red-500 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                  className="btn btn-outline-danger"
                 >
+                  <i className="bi bi-trash me-2"></i>
                   {loading ? 'Deleting...' : 'Delete'}
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <p className="text-sm font-semibold text-gray-600">Status</p>
-                <span className={`inline-block px-2 py-1 rounded text-sm ${
-                  task.status === 'Done' ? 'bg-green-100 text-green-800' :
-                  task.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {task.status}
-                </span>
+            <div className="row g-4 mb-4">
+              <div className="col-md-6">
+                <div className="card h-100 border-0 bg-light">
+                  <div className="card-body">
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      <i className="bi bi-flag-fill me-2"></i>
+                      Status
+                    </h6>
+                    <span className={`badge ${
+                      task.status === 'Done' ? 'bg-success' :
+                      task.status === 'In Progress' ? 'bg-warning text-dark' :
+                      'bg-secondary'
+                    } fs-6`}>
+                      {task.status}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <p className="text-sm font-semibold text-gray-600">Assigned To</p>
-                <p className="text-gray-800">{task.assignedTo}</p>
+              <div className="col-md-6">
+                <div className="card h-100 border-0 bg-light">
+                  <div className="card-body">
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      <i className="bi bi-person-fill me-2"></i>
+                      Assigned To
+                    </h6>
+                    <p className="card-text">{task.assignedTo}</p>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <p className="text-sm font-semibold text-gray-600">Created At</p>
-                <p className="text-gray-800">
-                  {new Date(task.createdAt).toLocaleDateString()}
-                </p>
+              <div className="col-md-6">
+                <div className="card h-100 border-0 bg-light">
+                  <div className="card-body">
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      <i className="bi bi-calendar-check me-2"></i>
+                      Created At
+                    </h6>
+                    <p className="card-text">
+                      {new Date(task.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <p className="text-sm font-semibold text-gray-600">Deadline</p>
-                <p className="text-gray-800">
-                  {new Date(task.deadline).toLocaleDateString()}
-                </p>
+              <div className="col-md-6">
+                <div className="card h-100 border-0 bg-light">
+                  <div className="card-body">
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      <i className="bi bi-calendar-event me-2"></i>
+                      Deadline
+                    </h6>
+                    <p className="card-text">
+                      {new Date(task.deadline).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="mb-6">
-              <p className="text-sm font-semibold text-gray-600 mb-2">Description</p>
-              <p className="text-gray-800 whitespace-pre-wrap">{task.description}</p>
+            <div className="card mb-4 border-0 bg-light">
+              <div className="card-body">
+                <h6 className="card-subtitle mb-3 text-muted">
+                  <i className="bi bi-card-text me-2"></i>
+                  Description
+                </h6>
+                <p className="card-text">{task.description}</p>
+              </div>
             </div>
 
-            <div className="border-t pt-4">
+            <div className="border-top pt-4">
               <Link
                 to="/tasks"
-                className="text-blue-600 hover:text-blue-800"
+                className="btn btn-link text-decoration-none ps-0"
               >
-                ← Back to Tasks
+                <i className="bi bi-arrow-left me-2"></i>
+                Back to Tasks
               </Link>
             </div>
           </div>
