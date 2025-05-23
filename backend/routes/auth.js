@@ -34,8 +34,6 @@ router.get('/logout', (req, res) => {
   res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}`);
 });
 
-<<<<<<< Updated upstream
-=======
 // @route   GET /api/auth/google
 // @desc    Authenticate with Google
 // @access  Public
@@ -62,7 +60,6 @@ router.get('/google/callback',
   }
 );
 
->>>>>>> Stashed changes
 // Auth routes
 router.post('/register', authController.register);
 router.post('/login', authController.login);
