@@ -162,7 +162,11 @@ function TaskList() {
                   <tr key={task._id} className="border-bottom">
                     <td className="px-4 py-3">
                       <Link 
+<<<<<<< Updated upstream
                         to={`/tasks/${task._id}`}
+=======
+                        to={`/tasks/${task._id}`} 
+>>>>>>> Stashed changes
                         className="text-decoration-none fw-medium"
                       >
                         {task.title}
@@ -170,6 +174,13 @@ function TaskList() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="d-flex align-items-center">
+<<<<<<< Updated upstream
+=======
+                        {/* <div className="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                            style={{width: '32px', height: '32px', fontSize: '14px'}}>
+                          <i className="bi bi-person text-white"></i>
+                        </div> */}
+>>>>>>> Stashed changes
                         {task.assignedTo}
                       </div>
                     </td>

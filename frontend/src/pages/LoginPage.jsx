@@ -1,8 +1,12 @@
 import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+<<<<<<< Updated upstream
 import { BsCheckSquare } from 'react-icons/bs';
 import api from '../services/api';
+=======
+import { BsCheckSquare } from 'react-icons/bs';  // Import the icon
+>>>>>>> Stashed changes
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -83,8 +87,28 @@ const LoginPage = () => {
                   </svg>
                   Continue with Google
                 </button>
+<<<<<<< Updated upstream
               </div>
             </div>
+=======
+
+                {/* <div className="text-center mt-4">
+                  <small className="text-muted">
+                    By signing in, you agree to our{' '}
+                    <a href="#" className="text-decoration-none">Terms of Service</a>
+                    {' '}and{' '}
+                    <a href="#" className="text-decoration-none">Privacy Policy</a>
+                  </small>
+                </div> */}
+              </div>
+            </div>
+
+            {/* <div className="text-center mt-4">
+              <p className="text-muted mb-0">
+                Need help? <a href="#" className="text-decoration-none">Contact Support</a>
+              </p>
+            </div> */}
+>>>>>>> Stashed changes
           </div>
         </div>
       </div>
