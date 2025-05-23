@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { getTaskById, updateTask } from '../services/taskService';
 
 const EditTask = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Changed from taskId to id
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,8 @@ const EditTask = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const task = await getTaskById(id);
+        console.log('Fetching task with ID:', id);
+        const task = await getTaskById(id); // Changed from taskId to id
         setFormData({
           title: task.title,
           description: task.description,
@@ -31,16 +32,17 @@ const EditTask = () => {
           status: task.status
         });
       } catch (err) {
+        console.error('Error fetching task:', err);
         setError('Error loading task details');
       } finally {
         setInitialLoading(false);
       }
     };
 
-    if (id) {
+    if (id) { // Changed from taskId to id
       fetchTask();
     }
-  }, [id]);
+  }, [id]); // Changed from taskId to id
 
   const handleChange = (e) => {
     setFormData({
@@ -55,9 +57,10 @@ const EditTask = () => {
     setError('');
 
     try {
-      await updateTask(id, formData);
+      await updateTask(id, formData); // Changed from taskId to id
       navigate('/tasks', { state: { message: 'Task updated successfully' } });
     } catch (err) {
+      console.error('Error updating task:', err);
       setError(err.response?.data?.msg || 'Error updating task');
     } finally {
       setLoading(false);
@@ -73,121 +76,123 @@ const EditTask = () => {
   }
 
   return (
-    <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-lg-8">
-          <div className="card shadow-lg border-0">
-            <div className="card-header bg-primary bg-opacity-10 border-0">
-              <h1 className="h4 text-primary mb-0">
-                <i className="bi bi-pencil-square me-2"></i>
-                Edit Task
-              </h1>
-            </div>
-            <div className="card-body p-4">
-              {error && (
-                <div className="alert alert-danger d-flex align-items-center" role="alert">
-                  <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                  {error}
-                </div>
-              )}
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Edit Task</h1>
 
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label htmlFor="title" className="form-label">Title</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-lg"
-                    id="title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label htmlFor="description" className="form-label">Description</label>
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    rows="4"
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                  ></textarea>
-                </div>
-
-                <div className="row mb-4">
-                  <div className="col-md-6">
-                    <label htmlFor="deadline" className="form-label">Deadline</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="deadline"
-                      name="deadline"
-                      value={formData.deadline}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="col-md-6">
-                    <label htmlFor="assignedTo" className="form-label">Assigned To</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="assignedTo"
-                      name="assignedTo"
-                      value={formData.assignedTo}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <label htmlFor="status" className="form-label">Status</label>
-                  <select
-                    className="form-select"
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
-                  </select>
-                </div>
-
-                <div className="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
-                  <Link to="/tasks" className="btn btn-light btn-lg">
-                    <i className="bi bi-arrow-left me-2"></i>
-                    Cancel
-                  </Link>
-                  <button 
-                    type="submit" 
-                    className="btn btn-primary btn-lg"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <i className="bi bi-check-circle me-2"></i>
-                        Save Changes
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
           </div>
-        </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+              Title *
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="input"
+              required
+              placeholder="Enter task title"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+              Description *
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="input min-h-[100px]"
+              required
+              placeholder="Enter task description"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deadline">
+              Deadline *
+            </label>
+            <input
+              type="date"
+              id="deadline"
+              name="deadline"
+              value={formData.deadline}
+              onChange={handleChange}
+              className="input"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="assignedTo">
+              Assigned To *
+            </label>
+            <input
+              type="text"
+              id="assignedTo"
+              name="assignedTo"
+              value={formData.assignedTo}
+              onChange={handleChange}
+              className="input"
+              required
+              placeholder="Enter assignee name"
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="status">
+              Status
+            </label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="input"
+            >
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Updating...
+                </span>
+              ) : (
+                'Update Task'
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/tasks')}
+              className="btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import api from '../services/api';
-
-const API_URL = '/api/auth';
 
 export const AuthContext = createContext();
+
+const API_URL = 'http://localhost:5000/api/auth';
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -14,7 +13,14 @@ export const AuthProvider = ({ children }) => {
 
   const checkUser = async () => {
     try {
-      const response = await api.get(`${API_URL}/user`);
+      const response = await axios.get(`${API_URL}/user`, {
+        withCredentials: true,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
       setCurrentUser(response.data);
       setIsAuthenticated(true);
       setError(null);
@@ -24,9 +30,7 @@ export const AuthProvider = ({ children }) => {
       }
       setCurrentUser(null);
       setIsAuthenticated(false);
-      
-      // Only redirect if not on home page
-      if (window.location.pathname !== '/' && window.location.pathname !== '/login') {
+      if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
     } finally {
@@ -38,32 +42,40 @@ export const AuthProvider = ({ children }) => {
     checkUser();
   }, []);
 
+  const loginWithGoogle = () => {
+    // Direct redirect instead of popup
+    window.location.href = `${API_URL}/google`;
+  };
+
   const logout = async () => {
     try {
-      await api.get(`${API_URL}/logout`);
+      const response = await axios.get(`${API_URL}/logout`, { 
+        withCredentials: true 
+      });
+      
+      if (response.status === 200) {
+        setCurrentUser(null);
+        setIsAuthenticated(false);
+        window.location.href = '/login';
+      }
+    } catch (error) {
+      console.error('Logout error:', error?.response?.data || error.message);
+      // Force logout on frontend even if backend fails
       setCurrentUser(null);
       setIsAuthenticated(false);
       window.location.href = '/login';
-    } catch (err) {
-      setError('Error logging out');
-      console.error('Logout error:', err);
     }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-        loading,
-        error,
-        isAuthenticated,
-        logout,
-        checkUser
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  const value = {
+    currentUser,
+    loading,
+    error,
+    isAuthenticated,
+    loginWithGoogle,
+    logout,
+    checkUser
+  };
 
-export default AuthProvider;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

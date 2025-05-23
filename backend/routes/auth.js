@@ -10,28 +10,34 @@ const authController = require('../controllers/authController');
 // @desc    Get logged in user
 // @access  Private
 router.get('/user', (req, res) => {
-  try {
-    // Get token from cookie
-    const token = req.cookies.token;
-    
-    if (!token) {
-      return res.status(401).json({ msg: 'No token, authorization denied' });
-    }
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.json(decoded);
-  } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
+  console.log('User session:', req.user);
+  if (!req.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
   }
+  res.json(req.user);
 });
 
 // @route   GET /api/auth/logout
 // @desc    Logout user / clear cookie
 // @access  Public
 router.get('/logout', (req, res) => {
-  res.clearCookie('token');
-  res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}`);
+  try {
+    req.logout((err) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ message: 'Error logging out' });
+      }
+      res.clearCookie('connect.sid', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+      });
+      res.status(200).json({ message: 'Logged out successfully' });
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Error logging out' });
+  }
 });
 
 // @route   GET /api/auth/google
@@ -42,8 +48,8 @@ router.get('/google', (req, res, next) => {
     scope: ['profile', 'email'],
     prompt: 'select_account',
     accessType: 'offline',
-    failureRedirect: 'http://localhost:3000/login',
-    successRedirect: 'http://localhost:3000/dashboard'
+    failureRedirect: 'http://localhost:1812/login',
+    successRedirect: 'http://localhost:1812/dashboard'
   })(req, res, next);
 });
 
@@ -52,11 +58,11 @@ router.get('/google', (req, res, next) => {
 // @access  Public
 router.get('/google/callback',
   passport.authenticate('google', { 
-    failureRedirect: 'http://localhost:3000/login'
+    failureRedirect: 'http://localhost:1812/login'
   }),
   (req, res) => {
     console.log('Google callback successful');
-    res.redirect('http://localhost:3000/dashboard');
+    res.redirect('http://localhost:1812/dashboard');
   }
 );
 
