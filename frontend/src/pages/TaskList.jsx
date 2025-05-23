@@ -162,7 +162,7 @@ function TaskList() {
                   <tr key={task._id} className="border-bottom">
                     <td className="px-4 py-3">
                       <Link 
-                        to={`/tasks/${task._id}`} 
+                        to={`/tasks/${task._id}`}
                         className="text-decoration-none fw-medium"
                       >
                         {task.title}
