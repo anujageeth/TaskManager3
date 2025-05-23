@@ -4,11 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { getTaskById, updateTask } from '../services/taskService';
 
 const EditTask = () => {
-<<<<<<< Updated upstream
-  const { taskId } = useParams();
-=======
   const { id } = useParams();
->>>>>>> Stashed changes
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -26,11 +22,7 @@ const EditTask = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-<<<<<<< Updated upstream
-        const task = await getTaskById(taskId);
-=======
         const task = await getTaskById(id);
->>>>>>> Stashed changes
         setFormData({
           title: task.title,
           description: task.description,
@@ -45,15 +37,10 @@ const EditTask = () => {
       }
     };
 
-<<<<<<< Updated upstream
-    fetchTask();
-  }, [taskId]);
-=======
     if (id) {
       fetchTask();
     }
   }, [id]);
->>>>>>> Stashed changes
 
   const handleChange = (e) => {
     setFormData({
@@ -68,13 +55,8 @@ const EditTask = () => {
     setError('');
 
     try {
-<<<<<<< Updated upstream
-      await updateTask(taskId, formData);
-      navigate('/tasks');
-=======
       await updateTask(id, formData);
       navigate('/tasks', { state: { message: 'Task updated successfully' } });
->>>>>>> Stashed changes
     } catch (err) {
       setError(err.response?.data?.msg || 'Error updating task');
     } finally {

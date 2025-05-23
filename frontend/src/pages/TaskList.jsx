@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import api from '../services/api';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 
@@ -9,14 +9,11 @@ function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-<<<<<<< Updated upstream
-=======
   const [message, setMessage] = useState("");
   const [selectedTask, setSelectedTask] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
->>>>>>> Stashed changes
 
   const filteredTasks = tasks.filter(task =>
     task.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -86,24 +83,6 @@ function TaskList() {
   }
 
   return (
-<<<<<<< Updated upstream
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">All Tasks</h2>
-        <div className="space-x-4">
-          <Link
-            to="/tasks/add"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Add Task
-          </Link>
-          <button
-            onClick={generatePDF}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Download PDF
-          </button>
-=======
     <div className="container-fluid p-4">
       {message && (
         <div className="alert alert-success alert-dismissible mb-4" role="alert">
@@ -145,7 +124,6 @@ function TaskList() {
               Download PDF
             </button>
           </div>
->>>>>>> Stashed changes
         </div>
       </div>
 
@@ -192,10 +170,6 @@ function TaskList() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="d-flex align-items-center">
-                        {/* <div className="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2" 
-                            style={{width: '32px', height: '32px', fontSize: '14px'}}>
-                          <i className="bi bi-person text-white"></i>
-                        </div> */}
                         {task.assignedTo}
                       </div>
                     </td>
